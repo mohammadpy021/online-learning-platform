@@ -1,0 +1,45 @@
+
+* {
+    font-family: IRANSans;
+}
+body {
+    direction: rtl;
+}
+
+
+/* .card-body{
+    min-height: 175px;
+} */
+
+.card-details {
+    margin-top: 1.3rem;
+}
+
+.content-90 {
+    width: 90%!important;;
+}
+.breadcrumb-title{
+    font-size: 2rem;
+}
+
+.custom-breadcrumb {
+    border-bottom: 1px solid #c4d5e6;
+}
+.custom-cart-detail li{
+    padding: 5px 0px;
+    color: #56626E;
+}
+
+.custom-cart-detail li span{
+    color: #000000;
+}
+.custom-cart-detail li .in-progress {
+    color: #36C9F4;
+}
+
+.in-progress-color {
+    font-size: 14px !important;
+    color: #00b2da;
+}
+
+

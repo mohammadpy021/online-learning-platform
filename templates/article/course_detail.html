@@ -1,0 +1,58 @@
+{% extends "article/base.html" %}
+
+
+
+{% block title %}{{object.title}}{% endblock title %}
+
+
+
+{% block breadcrumb %}
+    <li class="breadcrumb-item"><a href="{% url "courses:course-list" %}">دوره ها</a></li>
+    <li class="breadcrumb-item active" aria-current="page">{{object.title}}</li>
+{% endblock breadcrumb %}
+
+
+{% block breadcrumb_title %}
+{{object.title}}
+{% endblock breadcrumb_title %}
+
+{% block content %}
+
+<div class="content-90 mx-auto d-flex flex-wrap   ">
+
+    <!-- sidebar in responsive(mobile and medium size)-->
+    <aside class="d-sm-block d-lg-none w-100">
+        {% include "article/sidebar.html" %}
+    </aside>
+
+        <!-- main content-->
+        <div class="main col-lg-8">
+            <div class="card mx-3 my-3">
+                <img class="card-img-top" src="{{object.image.url}}" alt="{{object.image.title}}">
+                <div class="card-body">
+
+                  
+                  <div class="card-details d-flex justify-content-between align-items-center">
+                    
+                    <span class="course-detail">
+                        {{object.description|linebreaks}}
+                    </span>
+                    
+                    </div>
+                </div>
+               
+              </div> 
+        </div>
+        
+    <!-- sidebar content-->
+    <aside class="d-none d-lg-block  col-lg-4">
+        {% include "article/sidebar.html" %}
+    </aside>
+
+</div>
+
+
+{% endblock content %}
+
+
+

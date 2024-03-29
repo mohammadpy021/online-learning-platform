@@ -1,0 +1,101 @@
+{% extends "registration/base-registration.html" %}
+{% load static %}
+
+
+
+
+{% block form %}
+
+<div class="main-content d-flex flex-wrap flex-row justify-content-around">
+				
+    <div class="login100-pic js-tilt" data-tilt>
+        <img class="p-t-60" src="{% static 'registration/images/img-01.png' %} " alt="IMG">
+    </div>
+
+    <form method="post" class="register-form login100-form validate-form">
+            
+        {% csrf_token %}
+    
+        <span class="login100-form-title">
+            ثبت نام
+        </span>
+        <!-- Username  -->
+        <div class="wrap-input100 validate-input " data-validate = "">
+            <div class="input-group ">
+                <input  class="input100  px-5 {% if form.username.errors %} border border-danger {% endif %} " type="text" name="{{ form.username.name }}" id="{{form.username.auto_id}}" placeholder="نام کاربری">
+                <span class="focus-input100"></span>
+                <span class="symbol-input100 px-4">
+                    <i class="fa fa-user" aria-hidden="true"></i>
+                </span>
+            </div>
+            <span class="error text-danger">{{form.username.errors}}</span>
+        </div>
+        <!-- Email  -->
+        <div class="wrap-input100 validate-input" data-validate = "Valid email is required: ex@abc.xyz">
+            <div class="input-group">
+                <input class="input100 px-5 {% if form.email.errors %} border border-danger {% endif %}" type="text" name="{{ form.email.name }}" placeholder="ایمیل">
+                <span class="focus-input100"></span>
+                <span class="symbol-input100 px-4">
+                    <i class="fa fa-envelope" aria-hidden="true"></i>
+                </span>
+            </div>
+            <span class="error text-danger">{{form.email.errors}}</span>
+        </div>
+        <!-- Password  -->
+        <div class="wrap-input100 validate-input" data-validate = "Password is required">
+            <div class="input-group">
+                <input class="input100 px-5 {% if form.password1.errors %} border border-danger {% endif %}" type="password" name="{{ form.password1.name }}" placeholder="گذرواژه">
+                <span class="focus-input100"></span>
+                <span class="symbol-input100 px-4">
+                    <i class="fa fa-lock" aria-hidden="true"></i>
+                </span>
+            </div>
+            <span class="error text-danger">{{form.password1.errors}}</span>
+
+        </div>
+        <!-- Password-Repeat  -->
+        <div class="wrap-input100 validate-input" data-validate = "Password is required">
+            <div class="input-group">
+                <input class="input100 px-5 {% if form.password2.errors %} border border-danger {% endif %}" type="password" name="{{ form.password2.name }}" placeholder="تکرار گذواژه">
+                <span class="focus-input100"></span>
+                <span class="symbol-input100 px-4">
+                    <i class="fa fa-lock" aria-hidden="true"></i>
+                </span>
+            </div>
+            <span class="error text-danger">{{form.password2.errors}}</span>
+
+        </div>
+            
+        <!-- Submit Button  -->
+        <div class="container-login100-form-btn">
+            <button class="login100-form-btn">
+                ثبت نام
+            </button>
+        </div>
+        <!-- Forgot Password  -->
+        <div class="text-center p-t-12">
+            <span class="txt1">
+                فراموشی
+            </span>
+            <a class="txt2" href="#">
+            گذواژه
+            </a>
+        </div>
+        <!-- Login Page  -->
+        <div class="text-center p-t-136">
+            <a class="txt2" href="{% url "accounts:login" %}">
+            حسابی دارید؟ وارد شوید
+                <i class="fa fa-long-arrow-right m-l-5" aria-hidden="true"></i>
+            </a>
+        </div>
+    </form>
+
+
+
+</div >
+
+
+
+  
+
+{% endblock form %}

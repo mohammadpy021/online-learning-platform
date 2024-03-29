@@ -1,0 +1,131 @@
+{% extends 'registration/base.html' %}
+{% load crispy_forms_tags %}
+{% load static %}
+{% load humanize %}
+{% load jalali_tags %}
+
+
+
+{% block web_title %}  پروفایل {% endblock web_title %}
+
+
+{%block main%}
+
+
+{% if messages %}
+<div class="alert alert-success" role="alert">
+    
+    <ul  >
+        {% for message in messages %}
+        <li  {% if message.tags %} class=" {{ message.tags }} " {% endif %}> {{ message }} </li>
+        {% endfor %}
+    </ul>
+    
+  </div>
+{% endif %}
+
+<form method="post" enctype= "multipart/form-data"  >{% csrf_token %}
+   
+    {% if  form.errors %}
+        <div class="alert alert-danger" role="alert">
+            {{form.errors}}
+        </div>
+    {% endif %}
+
+    <div class="row">
+        
+            <div class="col-6">
+                {{ form.first_name|as_crispy_field }}
+               
+            </div>
+            <div class="col-6">
+                {{ form.last_name|as_crispy_field }}
+                
+            </div>
+            
+    </div>
+    
+ 
+   
+     
+    <div class="row">
+        <div class="col-4">
+            {{ form.username|as_crispy_field }}
+            
+
+        </div>
+        <div class="col-8">
+            {{ form.email|as_crispy_field }}
+            
+
+        </div>
+         
+        
+    </div>
+
+                                                                                                                                                            
+  
+		
+    
+    <div class="row mx-1">
+        
+        <div class="card col-3 p-0 " >
+            <div class="card-header">
+                {{ form.date_joined.label}}
+               
+            </div>
+            <ul class="list-group list-group-flush ">
+                {% if user.is_superuser %}
+            
+                    <li class="list-group-item "> <input class="input100  border-0  {% if form.date_joined.errors %} border border-danger {% endif %}" type="date" name="{{ form.date_joined.name }}" value={{ form.date_joined.value|date:'Y-m-d' }} ></li>
+                {% endif %}
+                {% comment %} {{form.date_joined}} {% endcomment %}
+              <li class="list-group-item mx-auto"> {{ form.date_joined.value|to_jalali:'%Y/%m/%d' }}</li>
+            </ul>
+        </div>
+        <div class="card col-3 p-0 " >
+            <div class="card-header">
+                {{ form.last_login.label|naturaltime }}
+            </div>
+            <ul class="list-group list-group-flush">
+                
+                                                                                                                                                                                                                
+                {% if user.is_superuser %}
+                    <li class="list-group-item">  <input type="datetime-local" class="input100  border-0  {% if form.last_login.errors %} border border-danger {% endif %}"  name="{{ form.last_login.name }}" value={{ form.last_login.value|date:'Y-m-d\Th:m:s' }} ></li>
+                {% endif %}
+              <li class="list-group-item mx-auto">  {{ form.last_login.value|naturaltime }}</li>
+            </ul>
+        </div>
+    </div> 
+
+    {% comment %} <div class="row">
+        <div class="col-2">
+            {{ form.date_joined|as_crispy_field}}
+        </div>
+
+        <div class="col-2">
+            
+            {{ form.last_login|as_crispy_field }}
+        </div>
+    </div> {% endcomment %}
+    
+    
+
+    {% comment %} <div class="col-12">
+       
+        {{ form.is_author|as_crispy_field }}
+    </div> {% endcomment %}
+   
+    <input class="btn bg-success" type="submit" value="ذخیره">
+    
+       
+        
+    <a href="{% url 'accounts:password_change' %}">  <p class="badge bg-warning w-25 p-3"> تغییر گذرواژه  </p></a>
+           
+        
+    
+    
+    
+</form>
+
+{% endblock %}
