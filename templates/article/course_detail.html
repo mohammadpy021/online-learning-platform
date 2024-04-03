@@ -1,5 +1,5 @@
 {% extends "article/base.html" %}
-
+{% load custom_filters %}
 
 
 {% block title %}{{object.title}}{% endblock title %}
@@ -13,7 +13,7 @@
 
 
 {% block breadcrumb_title %}
-{{object.title}}
+    {% firstof video_title object.title  %}
 {% endblock breadcrumb_title %}
 
 {% block content %}
@@ -28,18 +28,81 @@
         <!-- main content-->
         <div class="main col-lg-8">
             <div class="card mx-3 my-3">
-                <img class="card-img-top" src="{{object.image.url}}" alt="{{object.image.title}}">
+               
+                    {% if video_file %}
+
+                            <video
+                            style="position:relative;width:100%;height:100%;"
+                            id="my-video"
+                            class="video-js"
+                            controls
+                            preload="auto"
+                            poster="{{object.image.url}}"
+                            data-setup="{}"
+                        >
+                            <source src="{{video_file.url}}" type="video/mp4" />
+                        </video>
+                        <script src="https://vjs.zencdn.net/8.10.0/video.min.js"></script>
+
+                    {% comment %} <video controls>
+                        <source src="{{video_file.url}}" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video> {% endcomment %}
+                    {% else %}
+                        <img class="card-img-top" src="{{object.image.url}}" alt="{{object.image.title}}">
+                    {% endif %} 
+               
+                {% if not video_is_free %}
+                    <div class="badge bg-danger">
+                    باید کلا کاربر به حتی url مدیا هم دسترسی نداشته باشه
+                    این تو دوره نباید باشه
+                    </div>
+                {% endif %}
+                
+                
                 <div class="card-body">
 
                   
                   <div class="card-details d-flex justify-content-between align-items-center">
                     
                     <span class="course-detail">
-                        {{object.description|linebreaks}}
+                        {% firstof  video_description object.description as description %}
+                            {{description|linebreaks}}
                     </span>
                     
                     </div>
                 </div>
+                
+                    
+                <ul class="list-group list-group-flush">
+
+                    {% for video in object.videos.all|dictsort:"position" %}
+                    {% if  video.duration %}
+                        {% widthratio video.duration.seconds 3600 1 as hours %}
+                        {% widthratio video.duration.seconds 60 1 as minutes %} 
+                        {% modulo video.duration.seconds 60 as seconds %}{% comment %} custom tag {% endcomment %}
+                    {% endif %}
+                        
+                        {% if  video.publish %}
+                            <li class="episode-container list-group-item p-4 d-flex flex-wrap justify-content-between"> 
+                                <div class="episode_detail d-flex">
+                                    <p class="episode_counter mx-2"> {{ forloop.counter0 }}</p>
+                                    
+                                    <a href="{% url 'courses:video-detail' object.slug video.pk video.slug %}" class="episode_link mx-2">{{video.title}}</a>
+                                </div>
+                                <div class="episode_detail d-flex">
+                                    {% if  video.is_free and  not object.is_free %}
+                                        <p class="episode_is_free badge bg-warning text-dark mx-2"> رایگان </p>
+                                    {% endif %}
+                                    <p class="episode_duration mx-2" >
+                                        {% if  hours != '0'%}{{ hours }}:{% endif %}{{ minutes }}:{{ seconds }}
+                                     </p>
+                                </div>
+                            </li>
+                        {% endif %}
+                   
+                    {% endfor %}
+                </ul>
                
               </div> 
         </div>
@@ -51,6 +114,17 @@
 
 </div>
 
+
+<script>
+    flowplayer.cloud.then(function() {
+      // this is now the same synchronous environment
+      // but we know all cloud assets are ready
+      // since this was the target of the cloud loader
+      // we just want a reference to the Flowplayer instance
+      var video = flowplayer("#async-player")
+      console.log('flowplayer instance', video);
+    });
+    </script>
 
 {% endblock content %}
 

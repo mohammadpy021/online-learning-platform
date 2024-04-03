@@ -4,6 +4,8 @@ from jalali_date import datetime2jalali
 from jalali_date.fields import JalaliDateField
 from jalali_date.widgets import AdminJalaliDateWidget
 from django.utils.translation import gettext_lazy as _
+from moviepy.editor import VideoFileClip
+import datetime
 from .models import Course, Category, Videos
 from .forms import CourseForm
 
@@ -30,6 +32,19 @@ class CourseAdmin(admin.ModelAdmin):
         form.base_fields['author'].label_from_instance = lambda obj: "%s (%s)" % (obj.get_full_name(), obj.username)
         return form
     
+    def save_formset(self, request, form, formset, change):
+        """ create the duration for videos"""
+        formset.save() # this will save the children
+        form.instance.save() # form.instance is the parent
+        videos = form.instance.videos.all()
+        for video in videos:
+            clip = VideoFileClip(video.videofile.path)
+            video.duration = datetime.timedelta(seconds=int(clip.duration))
+            # frame_data = clip.get_frame(1)
+            # i.video_thumbnail = Image.fromarray(frame_data, 'RGB')
+            video.save()
+   
+
     def image_tag(self, obj):
         return format_html(f'<img src="{obj.image.url}" width="100px" />')
     image_tag.short_description ="تصویر"
@@ -42,6 +57,10 @@ class CourseAdmin(admin.ModelAdmin):
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
     pass
+
+
+
+
 
 
 

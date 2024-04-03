@@ -53,8 +53,6 @@ INSTALLED_APPS = [
      'crispy_forms',
      'crispy_bootstrap5',
 
-
-     
     'django_cleanup.apps.CleanupConfig',#this be last
 ]
 
@@ -177,21 +175,21 @@ JALALI_DATE_DEFAULTS = {
     },
 }
 
-#deafult auth
-#set custom user
+# deafult auth
+# set custom user
 AUTH_USER_MODEL = "accounts.User"
-# urls
-LOGIN_REDIRECT_URL = ("courses:home")
-LOGIN_URL = "accounts:login"
-LOGOUT_REDIRECT_URL = ("courses:home")
+# # urls (comment these in case of Error)
+# LOGIN_REDIRECT_URL = ("courses:home")
+# LOGIN_URL = "accounts:login"
+# LOGOUT_REDIRECT_URL = ("courses:home")
 
-#django crispy 
+# #django crispy 
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
 CRISPY_TEMPLATE_PACK = "bootstrap5"
 # CRISPY_TEMPLATE_PACK = 'uni_form'
 
-#ckEditor django
-CKEDITOR_BASEPATH = "/static/ckeditor/ckeditor/"
+# #ckEditor django
+# CKEDITOR_BASEPATH = "/static/ckeditor/ckeditor/"
 
-import django #this is needed for #deafult auth
-django.setup()
+# import django #this is needed for #deafult auth
+# django.setup()
