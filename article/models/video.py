@@ -7,12 +7,13 @@ from django.dispatch import receiver
 from django.db.models.signals import pre_save, post_save
 from moviepy.editor import VideoFileClip
 import datetime
+
+
+
 def video_path(instance, filename):
     return f'videos/{instance.course.slug}/{filename})'
 
-
 VIDEO_VALIDATOR = [FileExtensionValidator(allowed_extensions=['mp4', 'mkv'])]
-
 
 class Videos(models.Model):
     
@@ -37,6 +38,7 @@ class Videos(models.Model):
     video_thumbnail = models.ImageField(upload_to=video_path, blank=True, null=True, verbose_name="تامبنیل")
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    type = models.CharField(_("نوع"), default="video", max_length=10, editable=False)
      
 
     

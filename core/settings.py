@@ -33,6 +33,8 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    
+    
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -54,9 +56,12 @@ INSTALLED_APPS = [
      'crispy_bootstrap5',
 
     'django_cleanup.apps.CleanupConfig',#this be last
+    "debug_toolbar",
 ]
 
 MIDDLEWARE = [
+    "debug_toolbar.middleware.DebugToolbarMiddleware",
+    
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -64,6 +69,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    
 ]
 
 ROOT_URLCONF = 'core.urls'
@@ -193,3 +199,9 @@ CRISPY_TEMPLATE_PACK = "bootstrap5"
 
 # import django #this is needed for #deafult auth
 # django.setup()
+
+INTERNAL_IPS = [
+    # ...
+    "127.0.0.1",
+    # ...
+]

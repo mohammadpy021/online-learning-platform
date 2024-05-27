@@ -18,32 +18,28 @@
 
 {% block content %}
 
-<div class="content-90 mx-auto d-flex flex-wrap   ">
+<div class="content-90 mx-auto d-flex flex-wrap-reverse   ">
 
-    <!-- sidebar in responsive(mobile and medium size)-->
-    <aside class="d-sm-block d-lg-none w-100">
-        {% include "article/sidebar.html" %}
-    </aside>
+    
 
         <!-- main content-->
-        <div class="main col-lg-8">
+        <div class="main col-lg-8 ">
             <div class="card mx-3 my-3">
                
-                    {% if video_file %}
-
-                            <video
-                            style="position:relative;width:100%;height:100%;"
-                            id="my-video"
-                            class="video-js"
-                            controls
-                            preload="auto"
-                            poster="{{object.image.url}}"
-                            data-setup="{}"
-                        >
-                            <source src="{{video_file.url}}" type="video/mp4" />
-                        </video>
-                        <script src="https://vjs.zencdn.net/8.10.0/video.min.js"></script>
-
+                    {% if is_video_page  %}
+                        {% comment %} TODO: یا دوره رو کاربر خریده بود {% endcomment %}
+                                <video
+                                style="position:relative;width:100%;height:100%;"
+                                id="my-video"
+                                class="video-js"
+                                controls
+                                preload="auto"
+                                poster="{{object.image.url}}"
+                                data-setup="{}"
+                            >
+                                <source src="{{video_file.url}}" type="video/mp4" />
+                            </video>
+                            <script src="https://vjs.zencdn.net/8.10.0/video.min.js"></script>
                     {% comment %} <video controls>
                         <source src="{{video_file.url}}" type="video/mp4">
                         Your browser does not support the video tag.
@@ -52,22 +48,16 @@
                         <img class="card-img-top" src="{{object.image.url}}" alt="{{object.image.title}}">
                     {% endif %} 
                
-                {% if not video_is_free %}
-                    <div class="badge bg-danger">
-                    باید کلا کاربر به حتی url مدیا هم دسترسی نداشته باشه
-                    این تو دوره نباید باشه
-                    </div>
-                {% endif %}
-                
-                
                 <div class="card-body">
 
-                  
                   <div class="card-details d-flex justify-content-between align-items-center">
                     
                     <span class="course-detail">
-                        {% firstof  video_description object.description as description %}
-                            {{description|linebreaks}}
+                        {% if is_video_page  %}
+                            {% if video_description  %}{{video_description|linebreaks}}{% endif %}
+                        {% else %}
+                            {{ object.description|linebreaks}}
+                        {% endif %}
                     </span>
                     
                     </div>
@@ -76,23 +66,40 @@
                     
                 <ul class="list-group list-group-flush">
 
-                    {% for video in object.videos.all|dictsort:"position" %}
-                    {% if  video.duration %}
-                        {% widthratio video.duration.seconds 3600 1 as hours %}
-                        {% widthratio video.duration.seconds 60 1 as minutes %} 
-                        {% modulo video.duration.seconds 60 as seconds %}{% comment %} custom tag {% endcomment %}
-                    {% endif %}
-                        
+                    {% join_two_lists object.quizes.all object.videos.all as video_and_exam_list %}
+
+                    {% for video in video_and_exam_list|dictsort:"position" %}
+                        {% if  video.duration %}
+                            {% widthratio video.duration.seconds 3600 1 as hours %}
+                            {% widthratio video.duration.seconds 60 1 as minutes %} 
+                            {% modulo video.duration.seconds 60 as seconds %}{% comment %} custom tag {% endcomment %}
+                        {% endif %}
+                    
                         {% if  video.publish %}
                             <li class="episode-container list-group-item p-4 d-flex flex-wrap justify-content-between"> 
                                 <div class="episode_detail d-flex">
-                                    <p class="episode_counter mx-2"> {{ forloop.counter0 }}</p>
+                                    <p class="episode_counter mx-2"> {{ forloop.counter0 }} </p>
+                                    {% if video.type == 'quiz' %}<i class="bi bi-file-earmark-text"></i>{% else %}<i class="bi bi-play-circle"></i>{% endif %}
                                     
-                                    <a href="{% url 'courses:video-detail' object.slug video.pk video.slug %}" class="episode_link mx-2">{{video.title}}</a>
+                                    {% if  not video.is_free and  not object.is_free %}{% comment %} if video or exam is not free and course is not free too {% endcomment %}
+                                        {% comment %} {{video.title}} {% endcomment %}
+                                        {% if video.type == 'quiz' %}
+                                                <a href="{% url 'courses:quiz'  video.pk  %}" class="episode_link mx-2" style="text-decoration:none">{{video.title}}</a>
+
+                                        {% else %}
+                                                <a href="{% url 'courses:video-detail' object.slug video.pk video.slug %}" class="episode_link mx-2" style="text-decoration:none">{{video.title}}</a>
+                                        {% endif %}
+
+
+
+                                    {% else %}
+                                        <a href="{% url 'courses:video-detail' object.slug video.pk video.slug %}" class="episode_link mx-2" style="text-decoration:none">{{video.title}}</a>
+                                    {% endif %}
                                 </div>
                                 <div class="episode_detail d-flex">
-                                    {% if  video.is_free and  not object.is_free %}
-                                        <p class="episode_is_free badge bg-warning text-dark mx-2"> رایگان </p>
+                                    {% if  not video.is_free and  not object.is_free %}
+                                    <i class="bi bi-lock" style="color:red"></i>
+                                        {% comment %} <p class="episode_is_free badge bg-warning text-dark mx-2"> قفل </p> {% endcomment %}
                                     {% endif %}
                                     <p class="episode_duration mx-2" >
                                         {% if  hours != '0'%}{{ hours }}:{% endif %}{{ minutes }}:{{ seconds }}
@@ -105,10 +112,11 @@
                 </ul>
                
               </div> 
-        </div>
+        </div> 
+
         
     <!-- sidebar content-->
-    <aside class="d-none d-lg-block  col-lg-4">
+    <aside class="col-lg-4 col-12">
         {% include "article/sidebar.html" %}
     </aside>
 

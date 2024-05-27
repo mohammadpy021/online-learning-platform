@@ -2,7 +2,7 @@ from django import forms
 from jalali_date.fields import JalaliDateField, SplitJalaliDateTimeField
 from jalali_date.widgets import AdminJalaliDateWidget, AdminSplitJalaliDateTime
 from django.utils.translation import gettext_lazy as _
-from .models import Course, Videos
+from .models import Course,  QuizProfile
 
 
 class CourseForm(forms.ModelForm):
@@ -25,5 +25,23 @@ class CourseForm(forms.ModelForm):
         # )
 
 
-        
+class QuizForm(forms.ModelForm):
 
+        
+    # question = forms.ChoiceField(
+    #     widget=forms.RadioSelect,
+    #     choices=[], 
+    # )
+    
+    class Meta:
+        model = QuizProfile
+        fields = "__all__"
+
+        
+    # def clean(self):
+    #     """
+    #     Custom form cleaning
+    #     """
+    #     cleaned_data = super().clean()
+
+    #     cleaned_data['question'] = self.CHOICES(self)

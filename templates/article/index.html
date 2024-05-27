@@ -6,19 +6,140 @@
 
 
 {% block breadcrumb_title %}
-{{object.title}}
+
 {% endblock breadcrumb_title %}
 
+{% block index_header %}
+<div class="container d-flex flex-wrap-reverse flex-row col-lg-12">
+ <div class="col-lg-6"> 
+    <div class="header-title"> <h1> {{home.title}} </h1> </div>
+    <!-- search bar -->
+    <form class="col-lg-11  my-5"> 
+      <input type="search" class="form-control p-3" placeholder="جستجو برای..." aria-label="Search">
+    </form>
+    <span class="header-description"> {{home.description}} </span>
+
+  </div>
+
+ <div class="col-lg-6 ">
+  <img class="col-12" src="{{home.image.url}}" 
+          alt="header_banner" />
+ </div>
+</div>
+
+{% endblock index_header %}
 {% block content %}
 
-<div class="content-90 mx-auto d-flex flex-wrap   ">
+<div class="content-90 mx-auto    ">
 
-    hello world
+
+    
+  <div class="card  my-5">
+
+    <div class="card-title d-flex justify-content-between align-items-center px-5 mt-3">
+      <span class="title  " > دوره ها </span>
+      <small class="list-all  "> مشاهده همه </small>
+    </div>
+    <div class="gallery js-flickity  my-1 "
+      data-flickity-options='{ "wrapAround": true }'
+      >
+      {% for course in courses %}
+        
+        <div class="gallery-cell col-lg-3 col-5 ">
+          <div class="card  mx-2 my-3" style="border-radius:16px">   
+            <img class="card-img-top p-2" style="border-radius:15px" src="{{course.image.url}}" alt="Card image cap">
+            <div class="card-body  d-flex flex-column justify-content-around flex-wrap ">
+              <h5 class="card-title"><a href="{% url 'courses:course-detail' course.slug %}" > {{course.title|truncatewords:4}} </a> </h5>
+              {% comment %} <p class="card-text">{{course.description|truncatewords:15}}</p> {% endcomment %}
+              <div class="card-details d-flex justify-content-between align-items-center">
+                  <div class="custom-btn-course-status "> 
+                      <i class="fa fa-check"></i>
+                        <span class="publish-status">{% if course.publish_status == "completed" %} <i class="bi bi-check-circle text-success"> تکمیل ضبط </i> {% else %} <i class="bi bi-circle in-progress-color ">درحال ضبط </i> {% endif %}</span> 
+                  </div>
+                <span class="author"> {% firstof  course.author.get_full_name course.author.username %}</span>
+              </div>
+            </div>
+            <div class="card-footer d-flex justify-content-between align-items-center" style="background-color: initial;"    >
+              
+              <span class="price">{% if course.is_free %}رایگان{% else %}{{course.price }} تومان{% endif %}</span>
+            </div>
+          </div>  
+        </div>
+      
+      {% endfor %}
+
+    </div>
+  </div>  
+
+
+
+  <div id="carouselExampleCaptions" class="carousel slide " data-bs-ride="carousel">
+    <div class="carousel-indicators">
+      <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+      <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="1" aria-label="Slide 2"></button>
+     
+    </div>
+    <div class="carousel-inner">
+      <div class="carousel-item active">
+        <div class="image-home ">
+          <a href="{% url "courses:course-detail" home.banner_course.slug %}"> 
+            <img class="col-lg-12 rounded col-12" src="{{home.banner_image.url}}" />
+          </a>
+        </div>
+        <div class="carousel-caption d-none d-md-block">
+          <h5> {{home.banner_title}} </h5>
+          {% comment %} <p>Some representative placeholder content for the first slide.</p> {% endcomment %}
+        </div>
+      </div>
+
+      <div class="carousel-item">
+        <div class="image-home ">
+          <a href="{% url "courses:course-detail" home.banner2_course.slug %}"> 
+            <img class="col-lg-12 rounded col-12" src="{{home.banner2_image.url}}" />
+          </a>
+        </div>
+        <div class="carousel-caption d-none d-md-block">
+          <h5> {{home.banner2_title}} </h5>
+          {% comment %} <p>Some representative placeholder content for the second slide.</p> {% endcomment %}
+        </div>
+      </div>
+
+    </div>
+
+    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="prev">
+      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Previous</span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="next">
+      <span class="carousel-control-next-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Next</span>
+    </button>
+  </div>
+
+
+
+
+
+
+
+
+
+    
+
+
+
+    <div class="image-home">
+      <a href="{% url "courses:course-detail" home.banner_course.slug %}"> 
+        <img class="col-12 rounded" src="{{home.banner_image.url}}" />
+      </a>
+    </div>
 
 </div>
 
 
-{% endblock content %}
 
+
+
+{% endblock content %}
 
 

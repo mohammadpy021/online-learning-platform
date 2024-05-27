@@ -7,7 +7,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from .mixins import RedirectAuthenticatedMixin
 from .forms import SignupForm, UserForm
 from django.contrib.auth import get_user_model
-from django.contrib.auth.views import PasswordChangeView
+from django.contrib.auth.views import PasswordChangeView, LoginView, LogoutView
 
 
 class SignUpView(RedirectAuthenticatedMixin, CreateView): #RedirectURLMixin
@@ -17,8 +17,8 @@ class SignUpView(RedirectAuthenticatedMixin, CreateView): #RedirectURLMixin
 
     # success_url = reverse_lazy('accounts:login')
     def get_success_url(self):
-        messages.success(self.request, 'حساب شما با موفقیت ایجاد شد، لطفا اکنون وارد شوید')
-        return self.request.GET.get('next', reverse(settings.LOGIN_URL))
+        # messages.success(self.request, 'حساب شما با موفقیت ایجاد شد، لطفا اکنون وارد شوید')
+        return self.request.GET.get('next', reverse("accounts:login"))
     
 
 class ProfileView(LoginRequiredMixin, UpdateView): #RedirectURLMixin
@@ -59,3 +59,13 @@ class CustomPasswordChangeView(PasswordChangeView):
     def get_success_url(self):
         messages.success(self.request, 'پسورد شما با موفقیت تغییر پیدا کرد')
         return reverse("accounts:profile")
+    
+
+class CustomLogoutView(LogoutView):
+    def get_success_url(self):
+        return self.request.GET.get('next', reverse("courses:home"))
+
+# class CustomLoginView(LoginView):
+#     def get_success_url(self):
+#         return self.request.GET.get('next', reverse("courses:home"))
+

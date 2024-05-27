@@ -1,0 +1,27 @@
+/* external css: flickity.css */
+
+  
+  .gallery {
+    background: #ffffff;
+  }
+  
+  /* .gallery-cell {
+    
+    height: 2000px;
+    margin-right: 10px;
+    counter-increment: gallery-cell;
+  } */
+  
+  /* .gallery-cell.is-selected {
+    background: #ED2;
+  } */
+  
+  /* cell number */
+  /* .gallery-cell:before {
+    display: block;
+    text-align: center;
+    
+    line-height: 200px;
+    font-size: 80px;
+    color: white;
+  } */
