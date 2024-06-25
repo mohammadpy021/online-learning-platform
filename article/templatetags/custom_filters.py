@@ -1,4 +1,5 @@
 from django import template
+from django.urls import resolve, reverse
 
 register = template.Library()
 
@@ -55,6 +56,16 @@ def radio_input_color(quiz_is_done, user_option, question_id, input_option):
             return 'incorrect-form-check-input'
     return ''
 
+
+
+
+@register.simple_tag
+def resolver_path(current_path, url_name):
+    ''' check the url name of page    '''
+    my_url = resolve(current_path)
+    if my_url.url_name == str(url_name) : 
+        return True
+    return False
 
 
 

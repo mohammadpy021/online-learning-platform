@@ -37,7 +37,6 @@ class Course(models.Model):
     price = models.PositiveIntegerField(_("هزینه دوره"),help_text="به تومان", blank=True, null=True)
     #TODO:discount = models.DecimalField(max_digits=3, decimal_places=0, default=Decimal(0), validators=PERCENTAGE_VALIDATOR, blank=True, null=True)  
     image = models.ImageField(_("تصویر"), upload_to='thumbnails/') # 400 * 225
-    # video = models.FileField(upload_to='videos_uploaded/',blank=True, validators= VIDEO_VALIDATOR)
     slug  =  models.SlugField(_("نامک"), unique=True,  help_text = "slug")
     prerequisite = models.TextField(_("پیش نیاز های دوره"), blank=True, null=True)
 
@@ -49,6 +48,10 @@ class Course(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
     publish_at = models.DateTimeField(blank=True, default=timezone.now ) 
     #TODO: comments
+    
+    def get_absolute_url(self):
+        return reverse("courses:course-detail", kwargs={"slug": self.slug})
+    
        
     objects = CourseManager()
     def __str__(self):

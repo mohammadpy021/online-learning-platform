@@ -73,17 +73,19 @@
             </button>
         </div>
         <!-- Forgot Password  -->
-        <div class="text-center p-t-12">
+        {% comment %} <div class="text-center p-t-12">
             <span class="txt1">
                 فراموشی
             </span>
             <a class="txt2" href="#">
             گذواژه
             </a>
-        </div>
+        </div> {% endcomment %}
+
+        
         <!-- Login Page  -->
         <div class="text-center p-t-136">
-            <a class="txt2" href="{% url "accounts:login" %}">
+            <a class="txt2" href="{% url "accounts:login" %}{% if next %}?next={{next}}{% endif %}">
             حسابی دارید؟ وارد شوید
                 <i class="fa fa-long-arrow-right m-l-5" aria-hidden="true"></i>
             </a>

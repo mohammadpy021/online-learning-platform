@@ -1,6 +1,4 @@
-from typing import Any
 from django.db.models.base import Model as Model
-from django.db.models.query import QuerySet
 from django.http import HttpResponse, Http404
 from django.shortcuts import get_object_or_404, render
 from django.urls import reverse, reverse_lazy
@@ -9,7 +7,8 @@ from django.utils.translation import gettext_lazy as _
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect
-
+from django.db.models import  Q
+from django.contrib.auth import get_user_model
 from .models import Course, Videos, QuizProfile, Quiz, Question, HomePage
 from .forms import QuizForm
 
@@ -22,23 +21,34 @@ class HomeView(TemplateView):
         
         context['courses'] = Course.objects.active()[0:5]
         context['home']    = HomePage.objects.first()
+        # context['banner1_slug']    = HomePage.objects.first().banner_course.slug
+        # context['banner2_slug']    = HomePage.objects.first().banner2_course.slug
         return context
 
 
 class CourseListView(ListView):
     
     queryset = Course.objects.active()
-    #TODO paginate_by = 3 
+    paginate_by = 6
     context_object_name = "courses"
 
 
 class CourseDetailView(DetailView):
     model = Course
-    
     def get_object(self):
-        
+        global course_query
         course_query   = get_object_or_404(Course.objects.active(), slug=self.kwargs["slug"]) #course_slug
         return course_query 
+
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        if self.request.user.is_authenticated:
+            context["user_has_this_course"] = False
+            if course_query  in  self.request.user.courses.all():
+                context["user_has_this_course"] = True
+        return context
+    
     # def get_queryset(self):
     #     if self.request.method == 'GET':
     #         queryset = get_object_or_404(Course, slug = self.kwargs["slug"]) 
@@ -67,12 +77,18 @@ class VideoDetailView(DetailView):
             # context['video_file'] = get_object_or_404(Videos,pk = self.kwargs["pk"], slug=self.kwargs["video_slug"]  ).videofile
             
             video_query = course_query.videos.get(pk = self.kwargs["pk"], slug=self.kwargs["video_slug"])
-            if  video_query.is_free or course_query.is_free :
+            
+            user_has_this_course = False
+            if self.request.user and self.request.user.is_authenticated and course_query  in  self.request.user.courses.all():
+                user_has_this_course = True
+            
+            if  video_query.is_free or course_query.is_free or user_has_this_course :
                 context['video_file'] =  video_query.videofile
                 context['is_video_page'] = True  #specify that  we are in the course page or the video page
                 context['video_title'] = video_query.title
                 context['video_is_free'] = video_query.is_free
                 context['video_description'] = video_query.video_description
+                context["user_has_this_course"] = user_has_this_course
             else :
                 raise Http404
         return context
@@ -106,17 +122,22 @@ class VideoDetailView(DetailView):
 
 
 
-# Create your views here.
+
 @login_required
 def quiz_view(request, quiz_id):
     
     quizprofile_query , created = QuizProfile.objects.select_related("quiz").get_or_create(
         quiz=Quiz.objects.get(id=quiz_id ), user=request.user)
     
-    course_slug = quizprofile_query.quiz.course.slug
+    course_query = quizprofile_query.quiz.course
+    course_id  = course_query.id
+    course_slug  = course_query.slug
+    
     
     if request.method == 'POST':
         if not quizprofile_query.is_done :
+            if course_query not in  request.user.courses.all():
+                request.user.courses.add(Course.objects.get(id=course_id))
             # questions=Question.objects.all()
             # questions = Quiz.objects.get(id=quiz_id).question.all()
 
@@ -180,3 +201,22 @@ def quiz_view(request, quiz_id):
             })
         
         return render(request, 'article/quiz.html', context)
+
+
+
+class SearchView(ListView):
+    template_name = 'article/course_list.html'
+    context_object_name = 'courses'
+    
+    def get_queryset(self):
+        global search
+        global searched_course_query
+        search = self.request.GET.get('q', "")  #q is specified in the <input name='q'... and url: http://.../search/?q=< words > 
+        searched_course_query =  Course.objects.active().filter(Q(description__icontains=search) | Q(title__icontains=search))
+        return searched_course_query
+    
+    def get_context_data(self, **kwargs): #sending extra context
+        context = super().get_context_data(**kwargs)
+        context["search_title"] =  search
+        context["not_find"] =    False  if  searched_course_query else True
+        return context

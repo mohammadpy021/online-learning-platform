@@ -1,5 +1,6 @@
 from django.http import HttpResponseRedirect, QueryDict
 
+
 class RedirectAuthenticatedMixin:
     def dispatch(self, request, *args, **kwargs):
         if self.redirect_authenticated_user and self.request.user.is_authenticated:
@@ -11,3 +12,4 @@ class RedirectAuthenticatedMixin:
                 )
             return HttpResponseRedirect(redirect_to)
         return super().dispatch(request, *args, **kwargs)
+    

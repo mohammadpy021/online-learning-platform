@@ -46,6 +46,7 @@ class User(AbstractUser):
         default=False,
         help_text=("user verification by email"),)
     email = models.EmailField(("email address"), unique=True)
+    courses = models.ManyToManyField("article.course",verbose_name=_("دوره های کاربر") )
     objects = CustomUserManager()
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = []

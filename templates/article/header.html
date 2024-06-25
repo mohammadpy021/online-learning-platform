@@ -1,4 +1,6 @@
 {% load nav %}
+{% load custom_filters %}
+
 <div class=" shadow-sm  bg-white rounded sticky-top ">
 
 <header  class="navbar navbar-expand-lg  navbar-light  d-flex flex-wrap  py-3 ">{% comment %} justify-content-md-between  justify-content-around {% endcomment %}
@@ -25,18 +27,22 @@
         <li class="nav-item"><a class="nav-link" href="#">درباره ما</a></li>
        
       </ul>
+
       <!-- search bar -->
-      <form class="col-lg-3  mb-4 mb-lg-0 w-25"> 
-        <input type="search" class="form-control rounded-pill" placeholder="جستجو برای..." aria-label="Search">
-      </form>
+      {% resolver_path request.path "home" as is_this_page_home %}
+      {% if not is_this_page_home %}
+        <form class="col-lg-3  mb-4 mb-lg-0 w-25" action="{% url 'courses:search' %}"> 
+          <input type="search" name="q" class="form-control rounded-pill" value ="{{search_title}}"  placeholder="جستجو برای..." aria-label="Search">
+        </form>
+      {% endif %}
 
       <div class="col-lg-2 text-start">  
         {% if user.is_authenticated %}
           <a href="{% url 'accounts:profile' %}" class="btn btn-secondary text-white me-2">پروفایل</a>
           <a href="{% url 'accounts:logout' %}" class="btn btn-danger text-white">خروج</a> {% comment %}  TODO: Profile {% endcomment %}
         {% else %}
-          <a href="{% url 'accounts:login' %}" class="btn btn-outline-primary text-primary me-2">ورود</a>
-          <a href="{% url 'accounts:sign-up' %}" class="btn btn-primary text-white">ثبت نام</a>
+          <a href="{% url 'accounts:login' %}" class="btn btn-outline-primary text-primary   link-light  me-2">ورود</a>
+          <a href="{% url 'accounts:sign-up' %}" class="btn btn-primary bg-gradient text-white">ثبت نام</a>
         {% endif %}
       </div>
 

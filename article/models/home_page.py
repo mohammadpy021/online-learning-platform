@@ -5,9 +5,9 @@ from django.utils.translation import gettext_lazy as _
 
 class HomePage(models.Model):
     """ home page and image and description of home page"""
-    title= models.CharField(max_length=255, verbose_name=_("عنوان فیلم"))
+    title= models.CharField(max_length=255, verbose_name=_("عنوان سایت"))
     image = models.ImageField(_("تصویر header"), upload_to='homepageheader/')
-    description = models.TextField(verbose_name=_("عنوان فیلم"))
+    description = models.TextField(verbose_name=_("توضیحات سایت"))
     
     #banner 1
     banner_title= models.CharField(max_length=255, verbose_name=_("عنوان بنر"), blank=True, null=True)

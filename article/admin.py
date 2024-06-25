@@ -35,12 +35,15 @@ class CourseAdmin(admin.ModelAdmin):
             return _("رایگان")
         return obj.price
     price_or_is_free.short_description ="هزینه دوره"
-        
+  
     def get_form(self, request, obj=None, **kwargs):
         form = super().get_form(request, obj, **kwargs)
         form.base_fields['publish_at'] = JalaliDateField(label=_('publish_at'), # date format is  "yyyy-mm-dd"
                                                         widget=AdminJalaliDateWidget )
         form.base_fields['author'].label_from_instance = lambda obj: "%s (%s)" % (obj.get_full_name(), obj.username)
+        
+        # form.fields['author'].queryset = User.objects.filter(Q(is_author = True)| Q(is_superuser= True))     #way 1
+        form.base_fields['author'].queryset  = form.base_fields['author'].queryset.filter(is_superuser= True)  #way 2
         return form
     
     def save_formset(self, request, form, formset, change):

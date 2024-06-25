@@ -86,3 +86,33 @@ body {
     background-color: #198754!important;
     border-color: #198754!important;
 }
+
+.card-title a:hover , .nav-item a:hover{
+    color: #008cff!important;
+}
+
+
+.card-title a.list-all:hover {
+    color: white!important;
+}
+
+.carousel-text-title{
+    font-weight: 600;
+    font-size:1.2em;
+}
+.carousel-card-title-link{
+    /* display: flex;
+    max-height: 1.7em;
+    overflow: hidden; */
+    font-size: 1.15rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    line-clamp: 1;
+    -webkit-box-orient: vertical;
+}
+
+span.author , span.publish-status {
+    font-size: 14px;
+}

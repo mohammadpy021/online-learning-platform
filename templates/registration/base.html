@@ -1,4 +1,5 @@
 {% load static %}
+{% comment %} base profile page AdminLTE {% endcomment %}
 <!DOCTYPE html>
 <html>
 <head>
@@ -46,11 +47,8 @@
       <li class="nav-item">
         <a class="nav-link"  href="{% url 'accounts:logout' %}">خروج<i class="fa-solid fa-right-from-bracket"></i></a>
       </li>
-      <li class="nav-item d-none d-sm-inline-block">
-        <a href="{% url 'accounts:profile' %}" class="nav-link">خانه </a>
-      </li>
-      <li class="nav-item d-none d-sm-inline-block">
-        <a href="{% url 'courses:home' %}" target="_blank" class="nav-link">نمایش </a>
+      <li class="nav-item  d-sm-inline-block">
+        <a href="{% url 'courses:home' %}" target="_blank" class="nav-link"> نمایش  سايت </a>
       </li>
     </ul>
 
@@ -71,7 +69,7 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1 class="m-0 text-dark">{% block title %}عنوان صفحه{% endblock %}</h1>
+            <h1 class="m-0 text-dark">{% block container_title %}  {% endblock %}</h1>
           </div><!-- /.col -->
           <div class="col-sm-6">
           

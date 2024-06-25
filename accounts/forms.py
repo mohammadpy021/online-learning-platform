@@ -1,9 +1,11 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 from django.contrib.auth import authenticate, login, get_user_model
-from django.http import HttpResponseRedirect
+
 from jalali_date.fields import JalaliDateField, SplitJalaliDateTimeField
 from jalali_date.widgets import AdminJalaliDateWidget, AdminSplitJalaliDateTime
+
+
 class SignupForm(UserCreationForm):
     # email = forms.EmailField(max_length=200, help_text='Required')
 
@@ -11,17 +13,7 @@ class SignupForm(UserCreationForm):
         model = get_user_model()
         fields = ('username', 'email', 'password1', 'password2')
 
-    ## in case of auto Login
-    # def form_valid(self, form):
-    #     #save the new user first
-    #     form.save()
-    #     #get the username and password
-    #     username = self.request.POST['username']
-    #     password = self.request.POST['password1']
-    #     #authenticate user then login
-    #     user = authenticate(username=username, password=password)
-    #     login(self.request, user)
-    #     return HttpResponseRedirect(self.get_success_url)
+
         
 
 

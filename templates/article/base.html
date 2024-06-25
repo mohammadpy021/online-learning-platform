@@ -1,6 +1,6 @@
 {% load static %}
 {% load humanize %}
-
+{% load custom_filters %}
 
 
 <!DOCTYPE html>
@@ -37,24 +37,28 @@
 
 
         {% include "article/header.html" %}
-       
-    <div class=" custom-breadcrumb bg-light mb-4">
+    
+         
+    <div class="custom-breadcrumb bg-light mb-4">
         <div class="content-90 mx-auto py-4">
 
-            <div aria-label="breadcrumb py-4">
-                <ol class="breadcrumb">
-                    
-                <li class="breadcrumb-item"><a href=" {% url 'courses:home' %}">خانه</a></li>
-                /
-                {% block breadcrumb %}{% endblock breadcrumb %}
-                </ol>
-            </div>
-            <h1 class="breadcrumb-title py-4"> {% block breadcrumb_title %}{% endblock breadcrumb_title %} </h1 class="breadcrub-title">
-            {% block index_header %}{% endblock index_header %}
+            {% resolver_path request.path "home" as is_this_page_home %}
+            {% if  not is_this_page_home %}
+                <div aria-label="breadcrumb py-4">
+                    <ol class="breadcrumb">
+                        
+                    <li class="breadcrumb-item"><a href=" {% url 'courses:home' %}">خانه</a></li>
+                    /
+                    {% block breadcrumb %}{% endblock breadcrumb %}
+                    </ol>
+                </div>
+                <h1 class="breadcrumb-title py-4"> {% block breadcrumb_title %}{% endblock breadcrumb_title %} </h1 class="breadcrub-title">
+            {% endif %}
+            {% block home_header %}{% endblock home_header %}
         </div>
     </div>
       
-        {% block content %}{% endblock content %}
+    {% block content %}{% endblock content %}
 
 
         {% include "article/footer.html" %}

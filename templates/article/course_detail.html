@@ -81,29 +81,46 @@
                                     <p class="episode_counter mx-2"> {{ forloop.counter0 }} </p>
                                     {% if video.type == 'quiz' %}<i class="bi bi-file-earmark-text"></i>{% else %}<i class="bi bi-play-circle"></i>{% endif %}
                                     
-                                    {% if  not video.is_free and  not object.is_free %}{% comment %} if video or exam is not free and course is not free too {% endcomment %}
-                                        {% comment %} {{video.title}} {% endcomment %}
-                                        {% if video.type == 'quiz' %}
-                                                <a href="{% url 'courses:quiz'  video.pk  %}" class="episode_link mx-2" style="text-decoration:none">{{video.title}}</a>
+                                    {% if  not video.is_free and  not object.is_free and  not user_has_this_course  %}{% comment %} if video or exam is not free and course is not free too {% endcomment %}
 
+                                        {% if video.type == 'quiz' %}
+                                                <!-- quiz -->
+                                                <div class="episode_link mx-2 quiz" >{{video.title}}</div>
                                         {% else %}
-                                                <a href="{% url 'courses:video-detail' object.slug video.pk video.slug %}" class="episode_link mx-2" style="text-decoration:none">{{video.title}}</a>
+                                                <!-- video -->
+                                                <div class="episode_link mx-2 video" >{{video.title}}</div>
+                                                {% comment %} <a href="{% url 'courses:video-detail' object.slug video.pk video.slug %}" class="episode_link mx-2" style="text-decoration:none">{{video.title}}</a> {% endcomment %}
                                         {% endif %}
 
-
-
                                     {% else %}
-                                        <a href="{% url 'courses:video-detail' object.slug video.pk video.slug %}" class="episode_link mx-2" style="text-decoration:none">{{video.title}}</a>
+                                       {% if video.type == 'quiz' %}
+                                                <!-- quiz -->
+                                                <a href="{% url 'courses:quiz'  video.pk  %}" class="episode_link mx-2 quiz" style="text-decoration:none">{{video.title}}</a>
+
+                                               {% comment %} {% if not user_has_this_course %}
+                                                    <div class="episode_link mx-2 quiz" style="text-decoration:none">{{video.title}}</div>
+                                               {% else %}
+                                                    <a href="{% url 'courses:quiz'  video.pk  %}" class="episode_link mx-2 quiz" style="text-decoration:none">{{video.title}}</a>
+                                               {% endif %}  {% endcomment %}
+                                                
+                                        {% else %}
+                                                <!-- video -->
+                                                <a href="{% url 'courses:video-detail' object.slug video.pk video.slug %}" class="episode_link mx-2 video" style="text-decoration:none">{{video.title}}</a>
+                                        {% endif %}
                                     {% endif %}
                                 </div>
                                 <div class="episode_detail d-flex">
-                                    {% if  not video.is_free and  not object.is_free %}
+                                    {% if  not video.is_free and  not object.is_free and not user_has_this_course  %}
                                     <i class="bi bi-lock" style="color:red"></i>
                                         {% comment %} <p class="episode_is_free badge bg-warning text-dark mx-2"> قفل </p> {% endcomment %}
                                     {% endif %}
+
+                                    {% if video.type != 'quiz' %}
                                     <p class="episode_duration mx-2" >
                                         {% if  hours != '0'%}{{ hours }}:{% endif %}{{ minutes }}:{{ seconds }}
                                      </p>
+                                    {% endif %}
+
                                 </div>
                             </li>
                         {% endif %}
@@ -121,6 +138,61 @@
     </aside>
 
 </div>
+
+
+
+
+
+
+
+
+<div class="card content-90 mx-auto my-5 bg-light ">
+
+    <div class="card-title d-flex justify-content-between align-items-center px-3 mt-3">
+      <span class="title carousel-text-title   list-all btn btn-primary bg-gradient text-white link-light" > دوره های مرتبط </span>
+      
+    </div>
+    <div class="gallery js-flickity    mt-2 bg-light"
+      data-flickity-options='{ "groupCells": true,  "adaptiveHeight": false}'
+      >{% comment %} "freeScroll": true {% endcomment %}
+      {% for course in object.SuggestedCourses.all %}
+        
+        <div class="gallery-cell col-lg-3 col-md-4 col-sm-6 col-12 ">
+          <div class="card  mx-2 mb-3" style="border-radius:16px">   
+            <img class="card-img-top p-2" style="border-radius:15px; max-height:12rem" src="{{course.image.url}}" alt="Card image cap">
+            <div class="card-body  d-flex flex-column justify-content-around flex-wrap ">
+              <h5 class="card-title"><a class="carousel-card-title-link lh-base" href="{% url 'courses:course-detail' course.slug %}" > {{course.title}} </a> </h5>
+              {% comment %} <p class="card-text">{{course.description|truncatewords:15}}</p> {% endcomment %}
+              <div class="card-details d-flex   justify-content-between align-items-center ">
+                  <div class="custom-btn-course-status"> 
+                      <i class="fa fa-check"></i>
+                        <span class="publish-status">{% if course.publish_status == "completed" %} <i class="bi bi-check-circle text-success"> تکمیل ضبط </i> {% else %} <i class="bi bi-circle in-progress-color ">درحال ضبط </i> {% endif %}</span> 
+                  </div>
+                <span class="author"> {% firstof  course.author.get_full_name course.author.username %}</span>
+              </div>
+            </div>
+            <div class="card-footer d-flex justify-content-between align-items-center" style="background-color: initial;"    >
+              
+              <span class="price">{% if course.is_free %}رایگان{% else %}{{course.price }} تومان{% endif %}</span>
+            </div>
+          </div>  
+        </div>
+      
+      {% endfor %}
+
+    </div>
+  </div>
+
+
+
+
+
+
+
+
+
+
+
 
 
 <script>

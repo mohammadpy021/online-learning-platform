@@ -137,8 +137,8 @@
 
 
         <div class="card mx-3 my-3">
-            <div class="card-header bg-white text-secondary d-flex justify-content-between p1"> قیمت این دوره:
-                <span class="text-dark">  {% if object.is_free %}رایگان{% else %}{{course.price }} تومان </span>{% endif %}
+            <div class="card-header bg-white text-secondary d-flex justify-content-center "> نتیجه آزمون
+                
             </div>
             
             <div class="card-body">
@@ -146,11 +146,12 @@
                     <li class="d-flex justify-content-between"><i class="bi bi-person-fill"> درست ها : </i> <span>{{correct}}</span></li>
                     <li class="d-flex justify-content-between"><i class="bi bi-clock-fill">  نادرست ها: </i> <span>{{wrong}} </span></li>
                     <li class="d-flex justify-content-between"><i class="bi bi-question-octagon-fill">  نمره: </i> <span class="">  {{total_score}}% </span></li>
-                    <li class="d-flex justify-content-between"><i class="bi bi-clock-fill">  انتخاب کاربر:  </i> <br> <span> <br> {{user_choices}} </span> <br> </li>
+                    <li class="d-flex justify-content-between">  انتخاب کاربر:   </li>
+                    <li class="d-flex justify-content-between">   <span dir=ltr>  {{user_choices}} </span> </li>
 
                     <li class="d-flex justify-content-between"><i class="bi bi-person-fill"> user : </i> <span>  {{user}}</span></li>
                     <li class="d-flex justify-content-between"><i class="bi bi-person-fill"> is_done : </i> <span>  {{is_done}}</span></li>
-                    <li class="d-flex justify-content-between"><i class="bi bi-person-fill"> created : </i> <span> {{created}} </span></li>
+                    {% comment %} <li class="d-flex justify-content-between"><i class="bi bi-person-fill"> created : </i> <span> {{created}} </span></li> {% endcomment %}
                     
                     
 
@@ -161,7 +162,7 @@
               
                 </div>
               <button type="button" class="btn btn-primary btn-lg w-100">
-                {% if user.is_authenticated %}مشاهده دوره{% else %}ابتدا وارد حساب کاربری خود شوید{% endif %}
+                <a href="{% url "courses:course-detail" course_slug %}">مشاهده ادامه دوره </a>
               </button>
         
             </div>

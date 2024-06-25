@@ -11,7 +11,7 @@ from .models import User
 
 @admin.register(User)
 class CustomUserAdmin(UserAdmin):
-    list_display = ("username", "email", "full_name", "is_verified", "is_staff", "is_superuser")
+    list_display = ("username", "email", "full_name", "is_verified", "is_staff", "is_superuser",)
     def full_name(self, obj):
         return '{} {}'.format(obj.first_name, obj.last_name)
     
@@ -26,8 +26,10 @@ class CustomUserAdmin(UserAdmin):
                     "is_staff",
                     "is_superuser",
                     "is_verified",
+                    "courses",
                     "groups",
                     "user_permissions",
+                    
                 ),
             },
         ),

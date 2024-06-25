@@ -6,6 +6,12 @@
     <li class="breadcrumb-item">دوره ها</li>
 {% endblock breadcrumb %}
 
+{% block breadcrumb_title %} {% if search_title %}
+        جست جو برای 
+        {{search_title}} 
+        {% else %} دوره ها {% endif %} 
+{% endblock breadcrumb_title %}
+ 
 {% block content %}
 
 <div class="content content-90  mx-auto ">
@@ -13,7 +19,7 @@
         
       {% for course in courses  %}
         <div class="col-lg-4  d-flex  "> {% comment %} removing d-flex : cards height wont be equal  {% endcomment %}
-          <div class="card  mx-2 my-3">   
+          <div class="card  mx-3 my-3">   
                 <img class="card-img-top" src="{{course.image.url}}" alt="Card image cap">
                 <div class="card-body d-flex flex-column justify-content-around flex-wrap ">
                   <h5 class="card-title"><a href="{% url 'courses:course-detail' course.slug %}" > {{course.title}} </a> </h5>
@@ -26,16 +32,37 @@
                     <span class="author"> {% firstof  course.author.get_full_name course.author.username %}</span>
                 </div>
                 </div>
-                <div class="card-footer d-flex justify-content-between align-items-center">
+                <div class="card-footer d-flex justify-content-between align-items-center p-3 bg-white">
                 <span><i class="fa fa-clock course-duration"></i> {{course.time_of_course}} </span>
                   <small class="text-muted price">{% if course.is_free %}رایگان{% else %}{{course.price }} تومان{% endif %}</small>
                 </div>
           </div> 
         
               </div> 
+      {%empty%}
+    
+     
+      <div class="alert alert-danger mx-auto" role="alert">
+        
+        پستی مرتبط با 
+        
+        {{ search_title}} 
+       
+       پیدا نشد
+      </div>
+    
       {% endfor %}
+      
         
     </div>
+
+
+{% if page_obj %}
+  {% include "article/pagination.html" %}
+{% endif %}
+
+
 </div>
+
 
 {% endblock content %}
