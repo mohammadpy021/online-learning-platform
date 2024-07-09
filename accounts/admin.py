@@ -45,6 +45,3 @@ class CustomUserAdmin(UserAdmin):
             ),
         )
 
-
-
-

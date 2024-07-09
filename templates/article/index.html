@@ -38,13 +38,14 @@
 <div class="content-90 mx-auto    ">
 
 
-    
+ 
   <div class="my-5">
-
+    {% if courses  %}
     <div class="card-title d-flex justify-content-between align-items-center px-3 mt-3">
       <span class="title carousel-text-title" > جدیدترین دوره ها  </span>
        <a class="list-all btn btn-primary bg-gradient text-white link-light" href="{% url "courses:course-list" %}">مشاهده همه </a>
     </div>
+   
     <div class="gallery js-flickity  my-1 "
       data-flickity-options='{"freeScroll": true, "groupCells": true,  "wrapAround": true, "adaptiveHeight": false}'
       >{% comment %} "freeScroll": true {% endcomment %}
@@ -74,8 +75,16 @@
       {% endfor %}
 
     </div>
+    {% else %}
+  
+  <div class="alert alert-danger mx-auto text-center" role="alert">
+        
+    هنوز دوره ای وجود ندارد    
+    
+  </div>
+  {% endif %}
   </div>  
-
+  
 
 
   <div id="carouselExampleCaptions" class="carousel slide " data-bs-ride="carousel">
@@ -84,19 +93,23 @@
       <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="1" aria-label="Slide 2"></button>
      
     </div>
-    <div class="carousel-inner">
-      <div class="carousel-item active">
-        <div class="image-home ">
-          <a href="{% url "courses:course-detail" home.banner_course.slug %}"> 
-            <img class="col-lg-12 rounded col-12" src="{{home.banner_image.url}}" />
-          </a>
-        </div>
-        <div class="carousel-caption d-none d-md-block">
-          <h5> {{home.banner_title}} </h5>
-          {% comment %} <p>Some representative placeholder content for the first slide.</p> {% endcomment %}
-        </div>
-      </div>
 
+    {% if home.banner_course.slug   %}
+      <div class="carousel-inner">
+        <div class="carousel-item active">
+          <div class="image-home ">
+            <a href="{% url "courses:course-detail" home.banner_course.slug %}"> 
+              <img class="col-lg-12 rounded col-12" src="{{home.banner_image.url}}" />
+            </a>
+          </div>
+          <div class="carousel-caption d-none d-md-block">
+            <h5> {{home.banner_title}} </h5>
+            {% comment %} <p>Some representative placeholder content for the first slide.</p> {% endcomment %}
+          </div>
+        </div>
+      {% endif %}
+
+      {% if home.banner2_course.slug   %}
       <div class="carousel-item">
         <div class="image-home ">
           <a href="{% url "courses:course-detail" home.banner2_course.slug %}"> 
@@ -108,6 +121,7 @@
           {% comment %} <p>Some representative placeholder content for the second slide.</p> {% endcomment %}
         </div>
       </div>
+    {% endif %}
 
     </div>
 
