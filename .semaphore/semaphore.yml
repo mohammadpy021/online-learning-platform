@@ -5,7 +5,8 @@ agent:
     type: f1-standard-2
     os_image: ubuntu2204
 blocks:
-  - name: Build
+  - name: 'build '
+    dependencies: []
     task:
       jobs:
         - name: pip
