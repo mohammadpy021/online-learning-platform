@@ -20,7 +20,8 @@ class HomeView(TemplateView):
         context = super().get_context_data(*args, **kwargs)
         
         context['courses'] = Course.objects.active()[0:5]
-        context['home']    = HomePage.objects.first()
+        homepage = HomePage.objects.all()
+        context['home']    = homepage.first() if homepage else None
         # context['banner1_slug']    = HomePage.objects.first().banner_course.slug
         # context['banner2_slug']    = HomePage.objects.first().banner2_course.slug
         return context
