@@ -1,6 +1,8 @@
-<h1>django project for term 4 university</h1>
+<h1> online programming course platform </h1>
+django project for term 4 university
 
-<h2> creating Virtual environment </h2>
+
+<h2> creating a  Virtual environment </h2>
 
 <h3> Linux </h3>
 
