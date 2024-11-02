@@ -1,5 +1,5 @@
 <h1> online programming course platform </h1>
-django project for term 4 university
+django project for an online learing platform
 
 
 <h2> creating a  Virtual environment </h2>
